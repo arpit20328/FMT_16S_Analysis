@@ -31,7 +31,7 @@ day28_species    <- unique(day28_df$species)
 # ---- Identify Species X (Donor but not Baseline) ----
 species_X <- setdiff(donor_species, baseline_species)
 
-# ---- Build Result Table ----
+# ---- Build Initial Result Table ----
 df <- data.frame(
   Species = species_X,
   Present_Day15 = species_X %in% day15_species,
@@ -39,7 +39,10 @@ df <- data.frame(
   stringsAsFactors = FALSE
 )
 
+# ---- Filter: Only species that appear in Day15 or Day28 ----
+df_filtered <- df %>% filter(Present_Day15 | Present_Day28)
+
 # ---- Save Output ----
 output_file <- "FMT_species_X_table.tsv"
-write.table(df, file = output_file, sep = "\t", row.names = FALSE, quote = FALSE)
+write.table(df_filtered, file = output_file, sep = "\t", row.names = FALSE, quote = FALSE)
 cat("✅ Output written to:", output_file, "\n")

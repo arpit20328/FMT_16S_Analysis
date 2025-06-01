@@ -9,6 +9,7 @@ num_patients <- as.integer(readLines("stdin", n = 1))
 subject_names <- character(num_patients)
 donor_names <- character(num_patients)
 donor_isi <- numeric(num_patients)
+donor_alpha_values <- numeric(num_patients)  # New line to store donor alpha
 
 isi_values <- list()
 alpha_values <- list()
@@ -23,6 +24,9 @@ for (i in 1:num_patients) {
 
   cat(paste0("Enter donor ISI for ", subject_names[i], ":\n"))
   donor_isi[i] <- as.numeric(readLines("stdin", n = 1))
+
+  cat(paste0("Enter donor Alpha diversity value for ", subject_names[i], ":\n"))
+  donor_alpha_values[i] <- as.numeric(readLines("stdin", n = 1))  # New input
 
   cat(paste0("Enter ISI values for ", subject_names[i], " at pre fmt, day15, day28 (use NA if not present):\n"))
   isi_values[[i]] <- as.numeric(strsplit(readLines("stdin", n = 1), "\\s+")[[1]])
@@ -55,7 +59,7 @@ for (i in 1:num_patients) {
   df_alpha <- rbind(df_alpha, temp_df_alpha)
 
   legend_labels_isi[i] <- paste0(subject_names[i], " (Donor ISI: ", donor_isi[i], ")")
-  legend_labels_alpha[i] <- paste0(subject_names[i], " (Donor: ", donor_names[i], ", α=", alpha_values[[i]][1], ")")
+  legend_labels_alpha[i] <- paste0(subject_names[i], " (Donor: ", donor_names[i], ", Donor α=", donor_alpha_values[i], ")")  # Updated line
 }
 
 # Update factor levels for Subject
@@ -87,4 +91,3 @@ ggplot(df_alpha, aes(x = Timepoint, y = Alpha, group = Subject, color = Subject)
        y = "Alpha Diversity",
        color = "Subjects (Donor α-value)") +
   theme_minimal()
-
